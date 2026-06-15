@@ -1,32 +1,56 @@
 import yfinance as yf
-import pandas as pd
-from symbol_loader import load_symbols
+import json
+import csv
+from datetime import datetime
 
-symbols = load_symbols()
+with open("config/stocks.json", "r") as file:
+    data = json.load(file)
 
-for stock in symbols:
+stocks = data["stocks"]
+
+with open("logs/download_log.csv", "w", newline="") as file:
+
+    writer = csv.writer(file)
+
+    writer.writerow([
+        "symbol",
+        "timestamp",
+        "rows",
+        "status"
+    ])
+
+for stock in stocks:
 
     df = yf.download(
         stock,
         start="2020-01-01",
-        end="2025-01-01",
-        interval="1d"
+        end="2025-01-01"
     )
 
-    print(f"\nFirst 5 Rows for {stock}:\n")
-    print(df.head())
+    rows = len(df)
 
-    print(f"\nData Information for {stock}:\n")
-    df.info()
+    if rows > 0:
+        status = "SUCCESS"
+    else:
+        status = "FAILED"
 
-    print(f"\nDataset Shape for {stock}:")
-    print(df.shape)
+    df.to_csv(f"data/raw/{stock}.csv")
 
-    output_path = f"data/raw/{stock}.csv"
+    time = datetime.now().strftime("%d-%m-%y %H:%M:%S")
 
-    df.to_csv(
-        output_path,
-        
-    )
+    with open("logs/download_log.csv", "a", newline="") as file:
 
-    print(f"\nData saved to: {output_path}")
+        writer = csv.writer(file)
+
+        writer.writerow([
+            stock,
+            time,
+            rows,
+            status
+        ])
+
+    print(stock, status)
+   
+ 
+
+
