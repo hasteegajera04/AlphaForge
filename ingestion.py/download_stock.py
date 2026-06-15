@@ -1,11 +1,11 @@
 import yfinance as yf
 import pandas as pd
+from symbol_loader import load_symbols
 
-symbols = ["RELIANCE.NS", "TCS.NS", "INFY.NS", "HDFCBANK.NS"]
+symbols = load_symbols()
 
 for stock in symbols:
 
-    # Download stock data
     df = yf.download(
         stock,
         start="2020-01-01",
