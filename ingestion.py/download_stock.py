@@ -2,11 +2,10 @@ import yfinance as yf
 import json
 import csv
 from datetime import datetime
+from symbol_loader import load_symbols
 
-with open("config/stocks.json", "r") as file:
-    data = json.load(file)
-
-stocks = data["stocks"]
+data = load_symbols()
+stocks = data
 
 with open("data/metadata.csv", "w", newline="") as file:
 
@@ -33,11 +32,14 @@ with open("logs/download_log.csv", "w", newline="") as file:
 
 for stock in stocks:
 
-    df = yf.download(
-        stock,
+    ticker = yf.Ticker(stock)
+    df = ticker.history(
         start="2020-01-01",
-        end="2025-01-01"
-    )
+        end="2025-01-01") 
+        
+    
+    df = df.drop(
+    columns=["Dividends", "Stock Splits"])
 
     rows = len(df)
 
