@@ -1,0 +1,9 @@
+Stock: TEST_VALID
+
+Rows: 2
+
+Errors:
+None
+
+Score: 100.0
+Status: EXCELLENT

@@ -1,0 +1,10 @@
+Stock: TEST_BAD
+
+Rows: 1
+
+Errors:
+- Invalid Price Data
+- Invalid Volume Data
+
+Score: 50.0
+Status: REJECT

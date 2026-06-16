@@ -1,0 +1,9 @@
+Stock: INFY.NS
+
+Rows: 1238
+
+Errors:
+None
+
+Score: 100.0
+Status: EXCELLENT

@@ -14,8 +14,9 @@ for stock in stocks:
 
     df = pd.read_csv(f"data/raw/{stock}.csv")
 
-    print(df["Volume"].head())
     print(df["Volume"].dtype)
+    print(df["Volume"].head())
+    
 
     print("\nRows:", df.shape[0])
     print("Columns:", df.shape[1])
