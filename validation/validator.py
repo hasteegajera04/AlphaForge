@@ -3,30 +3,32 @@ from .rules import *
 
 def validate(df):
 
-    print("Validation Started ")
+    errors = []
 
     if not check_empty(df):
-        print("FAIL : Empty DataFrame")
-        return False
+        errors.append("Empty DataFrame")
 
     if not check_required_columns(df):
-        print("FAIL : Missing Required Columns")
-        return False
+        errors.append("Missing Required Columns")
 
     if not check_missing_values(df):
-        print("FAIL : Missing Values Found")
-        return False
+        errors.append("Missing Values Found")
 
     if not check_duplicate_rows(df):
-        print("FAIL : Duplicate Rows Found")
-        return False
+        errors.append("Duplicate Rows Found")
 
     if not check_price_logic(df):
-        print("FAIL : Invalid Price Data")
-        return False
+        errors.append("Invalid Price Data")
 
     if not check_volume(df):
-        print("FAIL : Invalid Volume Data")
+        errors.append("Invalid Volume Data")
+
+    if errors:
+        print("Validation Failed")
+
+        for error in errors:
+            print(error)
+
         return False
 
     print("Validation Passed")
