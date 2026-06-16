@@ -4,10 +4,21 @@ import os
 from datetime import datetime
 from .symbol_loader import load_symbols
 from validation.pipeline import validate_dataset
+from database.database import (
+    init_db,
+    save_download_log,
+    save_metadata,
+    save_stock,
+    save_stock_prices,
+    save_validation_result,
+)
 
 
 def main():
-   
+    os.makedirs("data/raw", exist_ok=True)
+    os.makedirs("logs", exist_ok=True)
+    init_db()
+
     stocks = load_symbols()
 
     with open("data/metadata.csv", "w", newline="") as file:
@@ -34,6 +45,7 @@ def main():
         ])
 
     for stock in stocks:
+        save_stock(stock)
 
         ticker = yf.Ticker(stock)
         df = ticker.history(
@@ -61,6 +73,9 @@ def main():
                     time
                 ])
 
+            save_stock_prices(stock, df)
+            save_metadata(stock, start_date, end_date, rows, time)
+
             print(f"{stock} passed validation")
         else:
             status = "FAILED"
@@ -75,6 +90,9 @@ def main():
                 rows,
                 status
             ])
+
+        save_download_log(stock, time, rows, status)
+        save_validation_result(stock, time, validation_result)
 
         print(f"Score: {validation_result['score']}")
         print(f"Status: {validation_result['status']}")
