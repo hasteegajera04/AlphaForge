@@ -8,6 +8,18 @@ with open("config/stocks.json", "r") as file:
 
 stocks = data["stocks"]
 
+with open("data/metadata.csv", "w", newline="") as file:
+
+    writer = csv.writer(file)
+
+    writer.writerow([
+        "symbol",
+        "start_date",
+        "end_date",
+        "rows",
+        "last_updated"
+    ])
+
 with open("logs/download_log.csv", "w", newline="") as file:
 
     writer = csv.writer(file)
@@ -38,6 +50,19 @@ for stock in stocks:
 
     time = datetime.now().strftime("%d-%m-%y %H:%M:%S")
 
+    start_date = df.index.min().date()
+    end_date = df.index.max().date()
+
+    with open("data/metadata.csv", "a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([
+            stock,
+            start_date,
+            end_date,
+            rows,
+            time
+            ])   
+        
     with open("logs/download_log.csv", "a", newline="") as file:
 
         writer = csv.writer(file)
