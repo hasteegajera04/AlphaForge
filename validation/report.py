@@ -1,24 +1,23 @@
-import os
+from config.db_config import REPORT_DIR
+
 
 def generate_report(symbol, df, errors, score, status):
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
-    os.makedirs("reports/validation", exist_ok=True)
+    path = REPORT_DIR / f"{symbol}_validation_report.txt"
 
-    path = f"reports/validation/{symbol}_validation_report.txt"
+    with path.open("w", encoding="utf-8") as file:
+        file.write(f"Stock: {symbol}\n\n")
+        file.write(f"Rows: {len(df)}\n\n")
 
-    with open(path, "w") as f:
-
-        f.write(f"Stock: {symbol}\n\n")
-        f.write(f"Rows: {len(df)}\n\n")
-
-        f.write("Errors:\n")
+        file.write("Errors:\n")
         if errors:
-            for e in errors:
-                f.write(f"- {e}\n")
+            for error in errors:
+                file.write(f"- {error}\n")
         else:
-            f.write("None\n")
+            file.write("None\n")
 
-        f.write(f"\nScore: {score}\n")
-        f.write(f"Status: {status}\n")
+        file.write(f"\nScore: {score}\n")
+        file.write(f"Status: {status}\n")
 
-    return path
+    return str(path)

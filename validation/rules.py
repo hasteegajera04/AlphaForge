@@ -1,15 +1,12 @@
+REQUIRED_PRICE_COLUMNS = ("Open", "High", "Low", "Close", "Volume")
+
+
 def check_empty(df):
     return not df.empty
 
 
 def check_required_columns(df):
-    required = ["Open", "High", "Low", "Close", "Volume"]
-
-    for column in required:
-        if column not in df.columns:
-            return False
-
-    return True
+    return all(column in df.columns for column in REQUIRED_PRICE_COLUMNS)
 
 
 def check_missing_values(df):
@@ -21,22 +18,21 @@ def check_duplicate_rows(df):
 
 
 def check_price_logic(df):
-    for _, row in df.iterrows():
+    required = ("Open", "High", "Low", "Close")
+    if not all(column in df.columns for column in required):
+        return False
 
-        if row["High"] < row["Open"]:
-            return False
+    highest_prices = df[["Open", "Close"]].max(axis=1)
+    lowest_prices = df[["Open", "Close"]].min(axis=1)
 
-        if row["High"] < row["Close"]:
-            return False
-
-        if row["Low"] > row["Open"]:
-            return False
-
-        if row["Low"] > row["Close"]:
-            return False
-
-    return True
+    return (
+        (df["High"] >= highest_prices)
+        & (df["Low"] <= lowest_prices)
+    ).all()
 
 
 def check_volume(df):
+    if "Volume" not in df.columns:
+        return False
+
     return (df["Volume"] >= 0).all()

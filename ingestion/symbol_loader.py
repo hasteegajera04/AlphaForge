@@ -1,8 +1,10 @@
 import json
 
-def load_symbols():
+from config.db_config import STOCKS_FILE
 
-    with open("config/stocks.json", "r") as file:
+
+def load_symbols():
+    with STOCKS_FILE.open("r", encoding="utf-8") as file:
         data = json.load(file)
 
     return data["stocks"]
