@@ -30,7 +30,8 @@ def main():
             "symbol",
             "timestamp",
             "rows",
-            "status"
+            "status",
+            "db_status"
         ])
 
     for stock in stocks:
@@ -44,6 +45,7 @@ def main():
         validation_result = validate_dataset(stock, df)
         rows = len(df)
         time = datetime.now().strftime("%d-%m-%y %H:%M:%S")
+        db_status = validation_result.get("db_status", "SKIPPED")
 
         if validation_result["valid"]:
             status = "SUCCESS"
@@ -73,11 +75,13 @@ def main():
                 stock,
                 time,
                 rows,
-                status
+                status,
+                db_status
             ])
 
         print(f"Score: {validation_result['score']}")
         print(f"Status: {validation_result['status']}")
+        print(f"Database Status: {db_status}")
         print(f"Report: {validation_result['report']}")
         print("--" * 30)
 

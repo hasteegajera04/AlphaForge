@@ -24,6 +24,8 @@
 
 from validation.validator import validate
 from validation.report import generate_report
+from ingestion.storage import insert_validated_stock_data
+from ingestion.database import init_database
 
 
 def validate_dataset(symbol, df):
@@ -43,13 +45,23 @@ def validate_dataset(symbol, df):
         status=status
     )
 
+    # Initialize database on first run
+    init_database()
+    
+    # If validation passed, insert data into database
+    db_status = "SKIPPED"
+    if is_valid:
+        db_result = insert_validated_stock_data(symbol, df, score, status)
+        db_status = "SUCCESS" if db_result["success"] else "FAILED"
+
     output = {
         "symbol": symbol,
         "valid": is_valid,
         "score": score,
         "status": status,
         "report": report_path,
-        "errors": errors
+        "errors": errors,
+        "db_status": db_status
     }
 
     return output
