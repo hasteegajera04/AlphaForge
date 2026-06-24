@@ -7,7 +7,7 @@ import os
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from ingestion.db_query import (
+from database.db_query import (
     load_stock_data_from_db,
     get_all_available_stocks,
     get_stock_info,

@@ -7,15 +7,27 @@ print("=" * 60)
 
 try:
     from validation.pipeline import validate_dataset
-    from ingestion.database import init_database
-    from ingestion.storage import insert_validated_stock_data
-    from ingestion.db_query import load_stock_data_from_db
-    print("✓ All imports successful")
+    from database.connection import init_database
+    from database.storage import insert_validated_stock_data
+    from database.db_query import load_stock_data_from_db
+    from database import (
+        stock_exists,
+        get_stock_dataframe,
+        get_all_symbols,
+        get_latest_price,
+        get_stock_metadata,
+        get_latest_n_rows,
+        get_price_between_dates,
+        get_stocks_by_status,
+        get_validation_result,
+        get_download_log,
+    )
+    print("OK - All imports successful")
     print()
     
     # Check database schema
     init_database()
-    print("✓ Database initialized")
+    print("OK - Database initialized")
     print()
     
     # List tables
@@ -24,7 +36,7 @@ try:
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
     tables = cursor.fetchall()
-    print("✓ Database tables:")
+    print("OK - Database tables:")
     for table in tables:
         print(f"  - {table[0]}")
     
@@ -35,8 +47,8 @@ try:
     metadata_count = cursor.fetchone()[0]
     
     print()
-    print(f"✓ Total price records: {price_count}")
-    print(f"✓ Total metadata records: {metadata_count}")
+    print(f"OK - Total price records: {price_count}")
+    print(f"OK - Total metadata records: {metadata_count}")
     
     conn.close()
     
@@ -46,6 +58,6 @@ try:
     print("=" * 60)
     
 except Exception as e:
-    print(f"✗ Error: {e}")
+    print(f"ERROR: {e}")
     import traceback
     traceback.print_exc()

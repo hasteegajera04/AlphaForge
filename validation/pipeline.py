@@ -24,8 +24,8 @@
 
 from validation.validator import validate
 from validation.report import generate_report
-from ingestion.storage import insert_validated_stock_data
-from ingestion.database import init_database
+from database.storage import insert_validated_stock_data
+from database.connection import init_database
 
 
 def validate_dataset(symbol, df):
