@@ -38,3 +38,13 @@ def calculate_hma(df:pd.DataFrame , window:int) -> pd.DataFrame :
 
     return df
 
+def calculate_macd(df: pd.DataFrame) -> pd.DataFrame:
+    df["ema_12"] = df["close"].ewm(span=12, adjust=False).mean()
+    df["ema_26"] = df["close"].ewm(span=26, adjust=False).mean()
+
+    df["macd"] = df["ema_12"] - df["ema_26"]
+    df["signal_line"] = df["macd"].ewm(span=9, adjust=False).mean()
+    df["macd_histogram"] = df["macd"] - df["signal_line"]
+
+    return df
+

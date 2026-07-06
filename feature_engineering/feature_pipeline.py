@@ -1,6 +1,7 @@
 from feature_engineering.indicators.trend import calculate_sma , calculate_ema, calculate_wma,calculate_hma
 from database.queries import  get_stock_dataframe
 from feature_engineering.features.trend_feature import create_trend_features
+from feature_engineering.target import generate_targets
 
 
 
@@ -18,7 +19,11 @@ for window in [20, 50, 200]:
 for window in [20, 50, 200]:
     df = calculate_hma(df, window)
 
+
 df = create_trend_features(df)
+
+
+df = generate_targets(df)
 
 
 print(df.tail())
