@@ -32,7 +32,7 @@ quant-data-pipeline/
 ├── requirements.txt
 └── README.md
 ```
-*(Update this tree to match your actual folder layout — happy to regenerate once you share it.)*
+
 
 ## Getting Started
 
